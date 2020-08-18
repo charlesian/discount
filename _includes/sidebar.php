@@ -154,15 +154,22 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="Products.php" class="nav-link active">
+                <a href="Products.php" class="nav-link <?php if($menu==1){ echo 'active';}?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Products Tables  </p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="Sales.php" class="nav-link">
+                <a href="Sales.php" class="nav-link <?php if($menu==2){ echo 'active';}?>">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Sales</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="SalesRecord.php" class="nav-link <?php if($menu==3){ echo 'active';}?>">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Sales Record</p>
                 </a>
               </li>
             </ul>

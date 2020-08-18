@@ -94,76 +94,110 @@ if (isset($_POST['update_membership'])) {
 					<section class="content">
 						<div class="container-fluid">
 							<div class="">
-								<form method="POST">
+							
 									<div class="card">
 										<!-- /.card-header -->
 										<div class="card-body">
-											<a class="btn btn-success float-right" onclick="Export()" id="btnExport" value="Export"  name="export" style="color:white"><i class="fa fa-fw fa-download"></i>Export</a>
-										</form>
+
+<?php
+if(!isset($_GET['storeid'])){
+	
+
+?>
+										
 										<table id="example1" class="table table-bordered table-hover">
 											<thead>
 												<tr>
-													<th width="110">Date</th>
+												
 													<th width="">Store Name</th>
-													<th width="100">Total Amount</th>
-													<th width="100">Discount</th>
+													<th width="">Discount %</th>
+													<th>Action</th>
 												</tr>
 											</thead>
-											<?php 
-											$view_query = mysqli_query($conn, "SELECT ts.acc_name as store_name,ts.pr_total as total_avail,ts.pr_discount as total_discount,ts.pr_no,ts.date FROM tbl_sales_total ts LEFT JOIN tbl_accont ta on ta.acc_id = ts.store_id  WHERE ts.customer_id = $acc_id ");
-											while ($row = mysqli_fetch_assoc($view_query)) {
-												$store_name = $row["store_name"];
-												$total_avail = $row["total_avail"];  
-												$total_discount = $row["total_discount"];  
-												$pr_no = $row["pr_no"];  
-												$date = $row["date"];  
-												?>
-												<tr>
-													<td>
-														<?php echo strtotime('F d Y h:i A',$date);?>
-													</td>
-													<td>
-														<a href=".php?pr_no=<?php echo $pr_no?>&date=<?php echo $date?>&total_avail=<?php echo $total_avail?>&total_discount=<?php echo $total_discount?>"><strong><?php echo ucwords($store_name);?></strong></a>
-													</td>
-													<td>
-														<strong><?php echo '$'.number_format($total_avail,2);?></strong>
-													</td>
-													<td>
-														<strong><?php echo '$'.number_format($total_discount,2);?></strong>
-													</td>
-												</tr>
+											<tbody>
+										<?php
+$view_query = mysqli_query($conn, "SELECT * FROM tbl_sales WHERE customer_id = $acc_id ");
+while ($row = mysqli_fetch_assoc($view_query)) { 
+	$store_id = $row["store_id"];
+	$discount = $row["total_discount"];
+    $user_query = mysqli_query($conn, "SELECT * FROM tbl_account WHERE acc_id = $store_id ");
+while ($row2 = mysqli_fetch_assoc($user_query)) {
+	$storename = $row2["acc_name"];
+
+}
+echo "<tr><td>".  $storename."</td><td>	$discount</td><td><a href='?storeid=".$store_id."'><button class='btn btn-info'>Purchase history</button></a></td></tr>";
+}
 
 
-												<div class="modal fade" id="modal-info_<?php echo $row['id']; ?>">
-													<div class="modal-dialog">
-														<div class="modal-content bg-primary">
-															<div class="modal-header">
-																<h4 class="modal-title">Update Product</h4>
-																<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-																	<span aria-hidden="true">&times;</span></button>
-																</div>
-																<form method="POST">
-																	<div class="modal-body">
-																		<label>Product Name</label>
-																		<input  class="form-control"type="text" name="item_update" value="<?php echo $item?>">
-																		<label>Product Amount</label>
-																		<input  class="form-control"type="number" name="amount_update" value="<?php echo $amount; ?>"><br>  
-																		<input hidden class="form-control"type="text" name="product_id" value="<?php echo $product_id; ?>"><br>  
-																	</div>
-																	<div class="modal-footer justify-content-between">
-																		<button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
-																		<button type="submit" name ="update_product" class="btn btn-outline-light"><i class="fa fa-fw fa-save"></i>Save changes</button>
-																	</div>
-																</form>
-															</div>
-															<!-- /.modal-content -->
-														</div>
-														<!-- /.modal-dialog -->
-													</div>
 
-													<!-- /.modal -->
-												<?php } ?>
+
+?>
+											</tbody>
+											
 											</table>
+											<?php
+}
+
+else{
+$storeid = $_GET['storeid'];
+	$user_query = mysqli_query($conn, "SELECT * FROM tbl_account WHERE acc_id = $storeid ");
+	while ($row2 = mysqli_fetch_assoc($user_query)) {
+		
+		$storename = $row2["acc_name"];
+	
+	}
+
+echo "<h3>STORE : ".$storename."</h3>" ;
+?>
+
+		
+<table id="example1" class="table table-bordered table-hover">
+											<thead>
+												<tr>
+												
+													<th width="">Purchase Number</th>
+													<th width="">Date Stamp</th>
+													<th width="">Original Amount</th>
+													<th width="">Discounted Amount</th>
+													<th>Action</th>
+												</tr>
+											</thead>
+											<tbody>
+										<?php
+$view_query = mysqli_query($conn, "SELECT * FROM tbl_sales WHERE customer_id = $acc_id ");
+while ($row = mysqli_fetch_assoc($view_query)) { 
+	$store_id = $row["store_id"];
+	$salesid = $row["salesid"];
+	$discount = $row["total_discount"];
+	$final_total = $row["finaltotal"];
+	$original = $row["total"];
+	$date = $row["date"];
+   
+echo "<tr><td>". $store_id."</td><td>".$date."</td><td>".$original."</td><td>".$final_total."</td><td><a href='?salesid=".$salesid."'><button class='btn btn-info'>View Items</button></a></td></tr>";
+}
+
+
+
+
+?>
+											</tbody>
+											
+											</table>
+
+
+
+
+
+<?php
+
+
+
+}
+
+											?>
+
+
+
 										</div>
 										<!-- /.card-body -->
 									</div>

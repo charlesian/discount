@@ -1,4 +1,5 @@
-<?php include '_includes/sessions.php';?>
+<?php include '_includes/sessions.php';
+$menu =1;?>
 <!DOCTYPE html>
 <html>
 <head>
